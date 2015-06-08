@@ -73,7 +73,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-contrib-watch");
 
 	grunt.registerTask("build", ["concat", "uglify", "less"]);
-	grunt.registerTask("default", ["jshint", "build", "less"]);
+	grunt.registerTask("default", ["build", "less"]);
 	grunt.registerTask("travis", ["default"]);
 
 };

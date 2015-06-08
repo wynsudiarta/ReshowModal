@@ -21,8 +21,7 @@
 	"use strict";
 
 
-	var pluginName = "ReshowModal",
-		defaults = {
+	var defaults = {
 			delay: 1000,
 			visitNumber: 3
 		};
@@ -32,7 +31,6 @@
 		this.el_id = "#"+element;
 		this.settings = $.extend( {}, defaults, options );
 		this._defaults = defaults;
-		this._name = pluginName;
 		this.init();
 	}
 
@@ -44,7 +42,6 @@
 			var modal = document.querySelector(  this.el_id ),
 				close = modal.querySelector( ".md-close" );
 
-			var that = this;
 
 			close.addEventListener( "click", function( ev ) {
 				ev.stopPropagation();
@@ -52,15 +49,15 @@
 			});
 
 			function removeModal( hasPerspective ) {
-				classie.remove( modal, 'md-show' );
+				classie.remove( modal, "md-show" );
 
 				if( hasPerspective ) {
-					classie.remove( document.documentElement, 'md-perspective' );
+					classie.remove( document.documentElement, "md-perspective" );
 				}
 			}
 
 			function removeModalHandler() {
-				removeModal( classie.has( modal, 'md-setperspective' ) );
+				removeModal( classie.has( modal, "md-setperspective" ) );
 			}
 
 			if ( $.cookie("visited") == null) {
@@ -71,10 +68,10 @@
 			}else{
 				var visited = $.cookie("visited", Number);
 				if (visited == this.settings.visitNumber){
-					$.removeCookie('visited', { path: '/' });
+					$.removeCookie("visited", { path: '/' });
 				}else{
 					visited++;
-					$.cookie('visited', visited, { path: '/' });
+					$.cookie("visited", visited, { path: '/' });
 				}
 			}
 		}
@@ -82,10 +79,10 @@
 
 	// A really lightweight plugin wrapper around the constructor,
 	// preventing against multiple instantiations
-	$.fn[ pluginName ] = function ( options ) {
+	$.fn.ReshowModal = function ( options ) {
 		return this.each(function() {
-			if ( !$.data( this, "plugin_" + pluginName ) ) {
-				$.data( this, "plugin_" + pluginName, new Plugin( $(this).attr("id"), options ) );
+			if ( !$.data( this, "plugin_ReshowModal" ) ) {
+				$.data( this, "plugin_ReshowModal", new Plugin( $(this).attr("id"), options ) );
 			}
 		});
 	};
