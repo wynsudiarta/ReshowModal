@@ -17,20 +17,27 @@ module.exports = function(grunt) {
 				" */\n"
 		},
 
+		less: {
+			theme: {
+				options: {cleancss: true},
+				files: { "dist/jquery.reshowmodal.css": "src/jquery.reshowmodal.less" }
+			}
+		},
+
 		// Concat definitions
 		concat: {
 			options: {
 				banner: "<%= meta.banner %>"
 			},
 			dist: {
-				src: ["src/jquery.boilerplate.js"],
-				dest: "dist/jquery.boilerplate.js"
+				src: ["src/jquery.reshowmodal.js"],
+				dest: "dist/jquery.reshowmodal.js"
 			}
 		},
 
 		// Lint definitions
 		jshint: {
-			files: ["src/jquery.boilerplate.js"],
+			files: ["src/jquery.reshowmodal.js"],
 			options: {
 				jshintrc: ".jshintrc"
 			}
@@ -39,22 +46,15 @@ module.exports = function(grunt) {
 		// Minify definitions
 		uglify: {
 			my_target: {
-				src: ["dist/jquery.boilerplate.js"],
-				dest: "dist/jquery.boilerplate.min.js"
+				src: ["dist/jquery.reshowmodal.js"],
+				dest: "dist/jquery.reshowmodal.min.js"
 			},
 			options: {
 				banner: "<%= meta.banner %>"
 			}
 		},
 
-		// CoffeeScript compilation
-		coffee: {
-			compile: {
-				files: {
-					"dist/jquery.boilerplate.js": "src/jquery.boilerplate.coffee"
-				}
-			}
-		},
+
 
 		// watch for changes to source
 		// Better than calling grunt a million times
@@ -66,14 +66,14 @@ module.exports = function(grunt) {
 
 	});
 
+	grunt.loadNpmTasks("grunt-contrib-less");
 	grunt.loadNpmTasks("grunt-contrib-concat");
 	grunt.loadNpmTasks("grunt-contrib-jshint");
 	grunt.loadNpmTasks("grunt-contrib-uglify");
-	grunt.loadNpmTasks("grunt-contrib-coffee");
 	grunt.loadNpmTasks("grunt-contrib-watch");
 
-	grunt.registerTask("build", ["concat", "uglify"]);
-	grunt.registerTask("default", ["jshint", "build"]);
+	grunt.registerTask("build", ["concat", "uglify", "less"]);
+	grunt.registerTask("default", ["jshint", "build", "less"]);
 	grunt.registerTask("travis", ["default"]);
 
 };
