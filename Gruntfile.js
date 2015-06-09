@@ -74,6 +74,5 @@ module.exports = function(grunt) {
 
 	grunt.registerTask("build", ["concat", "uglify", "less"]);
 	grunt.registerTask("default", ["build", "less"]);
-	grunt.registerTask("travis", ["default"]);
 
 };

@@ -20,7 +20,6 @@
 
 	"use strict";
 
-
 	var defaults = {
 			delay: 1000,
 			visitNumber: 3
@@ -28,7 +27,7 @@
 
 	// The actual plugin constructor
 	function Plugin ( element, options ) {
-		this.el_id = "#"+element;
+		this.element = element;
 		this.settings = $.extend( {}, defaults, options );
 		this._defaults = defaults;
 		this.init();
@@ -38,42 +37,36 @@
 	$.extend(Plugin.prototype, {
 		init: function () {
 
-			var delay = this.settings.delay;
-			var modal = document.querySelector(  this.el_id ),
-				close = modal.querySelector( ".md-close" );
+			var delay = this.settings.delay,
+				number = this.settings.visitNumber;
 
+			var modal = $(this.element),
+				close = modal.find( ".md-close" );
 
-			close.addEventListener( "click", function( ev ) {
-				ev.stopPropagation();
-				removeModalHandler();
+			close.click(function(e){
+				e.preventDefault();
+
+				modal.removeClass('md-show');
+
+				if(modal.hasClass('md-setperspective')){
+					$(document).removeClass('md-perspective')
+				}
 			});
 
-			function removeModal( hasPerspective ) {
-				classie.remove( modal, "md-show" );
-
-				if( hasPerspective ) {
-					classie.remove( document.documentElement, "md-perspective" );
-				}
-			}
-
-			function removeModalHandler() {
-				removeModal( classie.has( modal, "md-setperspective" ) );
-			}
 
 			if ( $.cookie("visited") == null) {
-				setTimeout(function(){
-					classie.add( modal, "md-show" );
-				},delay);
-				$.cookie('visited', '1', { path: '/' });
+				$.cookie('visited', '0');
 			}else{
 				var visited = $.cookie("visited", Number);
-				if (visited == this.settings.visitNumber){
-					$.removeCookie("visited", { path: '/' });
-				}else{
 					visited++;
-					$.cookie("visited", visited, { path: '/' });
-				}
+					$.cookie("visited", visited);
 			}
+
+			setTimeout(function(){
+				var visited = $.cookie("visited", Number);
+				if (visited % number !== 0) return;
+				modal.addClass('md-show');
+			},delay);
 		}
 	});
 
@@ -82,7 +75,7 @@
 	$.fn.ReshowModal = function ( options ) {
 		return this.each(function() {
 			if ( !$.data( this, "plugin_ReshowModal" ) ) {
-				$.data( this, "plugin_ReshowModal", new Plugin( $(this).attr("id"), options ) );
+				$.data( this, "plugin_ReshowModal", new Plugin( this, options ) );
 			}
 		});
 	};
